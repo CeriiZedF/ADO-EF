@@ -25,8 +25,8 @@ namespace ADO_EF.Data.Entity
 
         public Department? SecDep { get; set; } //опціональна властивість
 
-        public Department? ChiefDep { get; set; }
+        public Manager? Chief { get; set; }
 
-        public IEnumerable<Department> Subordinates { get; set; }
+        public List<Manager> SubManagers { get; set; } = null!;
     }
 }

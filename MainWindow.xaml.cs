@@ -38,19 +38,19 @@ namespace ADO_EF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //departmentsCountLabel.Content = dataContext.Departments.Count().ToString();
-            //managersCountLabel.Content = dataContext.Managers.Count().ToString();
-            //topChiefCountLabel.Content = dataContext.Managers.Where(manager => manager.IdChief == null)  // predicate - ф-ция, которая возвращает bool
-            //                             .Count().ToString();       // Для каждого элемента выполняется сравнение?
-            //                                                        // Нет! С анализа предиката создаётся SQL запрос
-            //smallChiefCountLabel.Content = dataContext.Managers.Where(manager => manager.IdChief != null).Count().ToString();
+            departmentsCountLabel.Content = dataContext.Departments.Count().ToString();
+            managersCountLabel.Content = dataContext.Managers.Count().ToString();
+            topChiefCountLabel.Content = dataContext.Managers.Where(manager => manager.IdChief == null) 
+                                         .Count().ToString();       
+                                                                    
+            smallChiefCountLabel.Content = dataContext.Managers.Where(manager => manager.IdChief != null).Count().ToString();
 
-            //узнаём Id -'IT отдела'
-            //Guid itGuid = Guid.Parse(dataContext.Departments.Where(department => department.Name == "IT відділ")
-            //                         .Select(department => department.Id).First().ToString());
-            //itDepartCountLabel.Content = dataContext.Managers.Where(manager => manager.IdMainDep == itGuid || manager.IdSecDep == itGuid).Count().ToString();
+          
+            Guid itGuid = Guid.Parse(dataContext.Departments.Where(department => department.Name == "IT відділ")
+                                     .Select(department => department.Id).First().ToString());
+            itDepartCountLabel.Content = dataContext.Managers.Where(manager => manager.IdMainDep == itGuid || manager.IdSecDep == itGuid).Count().ToString();
 
-            //twoDepartCountLabel.Content = dataContext.Managers.Where(manager => manager.IdMainDep != null && manager.IdSecDep != null).Count().ToString();
+            twoDepartCountLabel.Content = dataContext.Managers.Where(manager => manager.IdMainDep != null && manager.IdSecDep != null).Count().ToString();
 
 
             dataContext.Departments.Load();
@@ -436,12 +436,12 @@ namespace ADO_EF
 
             var query = dataContext
                 .Managers
-                .Include(m => m.Subordinates)
+                .Include(m => m.SubManagers)
                 //.Where(d => d.DeleteDt == null)
                 .Select(d => new Pair
                 {
                     Key = d.Name,
-                    Value = d.Subordinates.Count().ToString()
+                    Value = d.SubManagers.Count().ToString()
                 });
 
             Pairs.Clear();

@@ -24,34 +24,30 @@ namespace ADO_EF.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //налаштування самої бд - відношень (реляцій) між даними
-            //їх обмеження (розміру) та унікальність, а також сідування
-            //(від англ seed - зерно) - заповнення начальними даними
-            modelBuilder.Entity<Manager>()
-                .HasOne(m => m.MainDep)
-                .WithMany()
-                .HasForeignKey(m => m.IdMainDep)
-                .HasPrincipalKey(d => d.Id);
-        
-            modelBuilder.Entity<Manager>()
+      
+            modelBuilder
+                .Entity<Manager>()
+                .HasOne(m => m.MainDep)  
+                .WithMany(d => d.MainManagers)        
+                .HasForeignKey(m => m.IdMainDep)  
+                .HasPrincipalKey(d => d.Id);  
+
+            modelBuilder
+                .Entity<Manager>()
                 .HasOne(m => m.SecDep)
-                .WithMany(d => d.MainManagers)
+                .WithMany(d => d.SecManagers)
                 .HasForeignKey(m => m.IdSecDep)
-                .HasPrincipalKey(m => m.Id);
-
-            modelBuilder.Entity<Manager>()
-                .HasOne()
-                .WithMany()
-                .HasForeignKey(m => m.IdChief)
-                .HasPrincipalKey();
-
-            modelBuilder.Entity<Manager>()
-                .HasOne(m => m.ChiefDep)
-                .WithMany()
-                .HasForeignKey(m => m.IdChief)
                 .HasPrincipalKey(d => d.Id);
 
-            modelBuilder.Entity<Manager>()
+            modelBuilder
+               .Entity<Manager>()
+               .HasOne(m => m.Chief)
+               .WithMany(m => m.SubManagers)
+               .HasForeignKey(m => m.IdChief)
+               .HasPrincipalKey(m => m.Id);
+
+            modelBuilder
+                .Entity<Manager>()
                 .HasIndex(m => m.Login)
                 .IsUnique();
         }
